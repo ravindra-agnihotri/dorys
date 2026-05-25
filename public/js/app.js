@@ -73,7 +73,7 @@ async function loadTodaySpecial() {
   sec.style.display = 'block';
   card.className = 'special-wrap';
   card.innerHTML = `
-    <img src="${s.imageUrl}" alt="${s.name} — Today's Special at Dory's Bakehouse Baner" class="sp-img"
+    <img loading="lazy" src="${s.imageUrl}" alt="${s.name} — Today's Special at Dory's Bakehouse Baner" class="sp-img"
          onerror="this.style.display='none'">
     <div class="sp-body">
       <div class="sp-badge">🌟 Today's Special</div>
@@ -136,7 +136,7 @@ function renderCakes(filter) {
   grid.innerHTML = list.map((c, i) => `
     <article class="cake-card" role="listitem" aria-label="${c.name} cake">
       <div class="cake-img-wrap">
-        <img class="cake-img" src="${c.imageUrl}" alt="${c.name} — Custom cake at Dory's Bakehouse Baner Pune"
+        <img loading="lazy" class="cake-img" src="${c.imageUrl}" alt="${c.name} — Custom cake at Dory's Bakehouse Baner Pune"
              loading="${i < 4 ? 'eager' : 'lazy'}"
              onerror="this.closest('.cake-img-wrap').style.background='var(--pink-lt)'">
         <div class="cake-badges">
@@ -196,7 +196,7 @@ async function loadGallery() {
   const shown = galleryImages.slice(0, 12);
   grid.innerHTML = shown.map((img, i) => `
     <div class="gal-item" data-idx="${i}" role="listitem">
-      <img class="gal-img" src="${img.url}"
+      <img loading="lazy" class="gal-img" src="${img.url}"
            alt="${img.title || 'Custom cake from Dory\'s Bakehouse Baner Pune'}" loading="lazy"
            onerror="this.closest('.gal-item').style.display='none'">
       <div class="gal-overlay" aria-hidden="true"><i class="fas fa-expand-alt"></i></div>
@@ -351,17 +351,3 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Run reveal after content loads
   initReveal();
 });
-
-/* ═════════════════════════════
-   INSTAGRAM STATUS INDICATOR
-   Shows in gallery header if IG is connected
-═════════════════════════════ */
-async function checkInstagram() {
-  const status = await api('/api/instagram/status');
-  if (!status?.connected) return;
-  const header = document.querySelector('#gallery .section-header p');
-  if (header) {
-    header.innerHTML += ` &nbsp;·&nbsp; <a href="/instagram-setup.html" style="color:var(--pink);font-weight:600"><i class="fab fa-instagram"></i> @${status.username}</a>`;
-  }
-}
-document.addEventListener('DOMContentLoaded', checkInstagram);
