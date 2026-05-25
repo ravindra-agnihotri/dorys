@@ -4,6 +4,3 @@ Disallow: /admin
 Disallow: /api/
 
 Sitemap: https://www.dorysbakes.com/sitemap.xml
-
-
-n

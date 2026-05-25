@@ -56,7 +56,7 @@
 <div class="lightbox" id="lightbox">
   <button class="lb-close" id="lbClose"><i class="fas fa-times"></i></button>
   <button class="lb-nav prev" id="lbPrev"><i class="fas fa-chevron-left"></i></button>
-  <img loading="lazy" class="lb-img" id="lbImg" src="" alt="Cake from Dory's Bakehouse">
+  <img class="lb-img" id="lbImg" src="" alt="Cake from Dory's Bakehouse">
   <button class="lb-nav next" id="lbNext"><i class="fas fa-chevron-right"></i></button>
 </div>
 <a href="https://wa.me/919168445014" class="fab-wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
@@ -66,7 +66,7 @@ const lb=document.getElementById('lightbox'),lbImg=document.getElementById('lbIm
 fetch('/api/gallery').then(r=>r.json()).then(data=>{
   if(!data.length){document.getElementById('galEmpty').style.display='block';document.getElementById('fullGallery').innerHTML='';return;}
   imgs=data;
-  document.getElementById('fullGallery').innerHTML=data.map((g,i)=>`<div class="gal-item" data-idx="${i}"><img loading="lazy" class="gal-img" src="${g.url}" alt="Custom cake Baner Pune" loading="lazy" onerror="this.closest('.gal-item').style.display='none'"><div class="gal-overlay"><i class="fas fa-expand-alt"></i></div></div>`).join('');
+  document.getElementById('fullGallery').innerHTML=data.map((g,i)=>`<div class="gal-item" data-idx="${i}"><img class="gal-img" src="${g.url}" alt="Custom cake Baner Pune" loading="lazy" onerror="this.closest('.gal-item').style.display='none'"><div class="gal-overlay"><i class="fas fa-expand-alt"></i></div></div>`).join('');
   document.getElementById('fullGallery').addEventListener('click',e=>{const it=e.target.closest('.gal-item');if(it){idx=parseInt(it.dataset.idx);lbImg.src=imgs[idx].url;lb.classList.add('open');document.body.style.overflow='hidden';}});
 }).catch(()=>{});
 document.getElementById('lbClose').onclick=()=>{lb.classList.remove('open');document.body.style.overflow='';};
