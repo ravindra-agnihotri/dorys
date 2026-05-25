@@ -726,31 +726,3 @@ body:not(.no-bar) .navbar { top: 0; }
   .stat strong, .stat-num { font-size: 1.5rem; }
   .local-grid { grid-template-columns: 1fr 1fr; }
 }
-
-
-/* Uniform image thumbnails */
-.cake-img-wrap,
-.sp-img,
-.gallery-card img,
-.gallery-grid img,
-img.product-image {
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  overflow: hidden;
-}
-
-.cake-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.cake-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.cake-body {
-  flex-grow: 1;
-}
