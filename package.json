@@ -3,20 +3,19 @@
   "version": "2.0.0",
   "description": "Dory's Bakehouse – Cake Shop Website with SQLite Image Storage",
   "main": "server.js",
-  "engines": {
-    "node": "20.x"
-  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
-    "better-sqlite3": "^11.9.1",
+    "better-sqlite3": "^9.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.19.2",
-    "multer": "^1.4.5-lts.1",
-    "sharp": "^0.33.4"
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

@@ -145,7 +145,16 @@
 </head>
 <body>
 
-<aside class="sidebar">
+<!-- Mobile topbar -->
+<div class="admin-topbar">
+  <span class="admin-topbar-logo">🎂 <em>Admin</em></span>
+  <button class="admin-ham" id="adminHam" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<aside class="sidebar" id="adminSidebar">
   <div class="sidebar-logo">🎂 <span>Dory's</span> Admin</div>
   <nav class="sidebar-nav">
     <button class="nav-item active" data-panel="products"><i class="fas fa-cake-candles"></i> <span>Products</span></button>
@@ -543,5 +552,20 @@ loadReviewsAdmin();
 loadFlavours();
 loadAboutAdmin();
 </script>
+
+<script>
+(function(){
+  var ham=document.getElementById('adminHam');
+  var sidebar=document.getElementById('adminSidebar');
+  var overlay=document.getElementById('sidebarOverlay');
+  function open(){sidebar.classList.add('mobile-open');overlay.classList.add('open');ham.classList.add('open');document.body.style.overflow='hidden';}
+  function close(){sidebar.classList.remove('mobile-open');overlay.classList.remove('open');ham.classList.remove('open');document.body.style.overflow='';}
+  ham&&ham.addEventListener('click',function(){sidebar.classList.contains('mobile-open')?close():open();});
+  overlay&&overlay.addEventListener('click',close);
+  // Close on nav item click on mobile
+  sidebar&&sidebar.querySelectorAll('.nav-item').forEach(function(btn){btn.addEventListener('click',function(){if(window.innerWidth<=700)close();});});
+})();
+</script>
+
 </body>
 </html>

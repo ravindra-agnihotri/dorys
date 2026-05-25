@@ -181,7 +181,27 @@
       .intro-block { padding: 1.8rem; }
       .intro-block p:first-child::first-letter { font-size: 3.5rem; }
     }
-  </style>
+  
+    /* ── Mobile Nav ── */
+    .pg-hamburger { display:flex; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px; min-width:44px; min-height:44px; align-items:center; justify-content:center; }
+    .pg-hamburger span { display:block; width:22px; height:2px; background:var(--text,#1a1410); border-radius:2px; transition:.28s; }
+    .pg-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .pg-hamburger.open span:nth-child(2){opacity:0;}
+    .pg-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    @media(min-width:768px){.pg-hamburger{display:none;}}
+    .pg-drawer { display:none; position:fixed; inset:0; z-index:999; background:rgba(18,8,16,.97); flex-direction:column; overflow-y:auto; }
+    .pg-drawer.open { display:flex; }
+    .pg-drawer-head { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.5rem; border-bottom:1px solid rgba(255,255,255,.08); }
+    .pg-drawer-logo { font-family:'Dancing Script',cursive; font-size:1.4rem; color:#fff; font-weight:700; }
+    .pg-drawer-logo em { color:#d4a574; font-style:normal; }
+    .pg-drawer-close { background:rgba(255,255,255,.1); border:none; color:#fff; width:40px; height:40px; border-radius:50%; font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    .pg-drawer-nav { display:flex; flex-direction:column; padding:1.5rem; gap:.3rem; flex:1; }
+    .pg-drawer-nav a { color:rgba(255,255,255,.85); font-size:1.05rem; font-weight:500; padding:.85rem 1rem; border-radius:10px; display:flex; align-items:center; gap:.75rem; transition:background .2s; text-decoration:none; }
+    .pg-drawer-nav a:hover { background:rgba(255,255,255,.08); color:#d4a574; }
+    .pg-drawer-nav a i { width:20px; text-align:center; color:#e91e8c; font-size:.95rem; }
+    .pg-drawer-wa { margin:1rem 1.5rem 2rem; background:linear-gradient(135deg,#128C7E,#25d366); color:#fff !important; padding:.95rem 1.5rem; border-radius:14px; font-size:.95rem; font-weight:700; text-align:center; display:flex; align-items:center; justify-content:center; gap:.6rem; text-decoration:none; }
+
+    </style>
 </head>
 <body>
 
@@ -195,7 +215,8 @@
         <i class="fab fa-whatsapp"></i> Order Now
       </a>
     </nav>
-  </div>
+      <button class="pg-hamburger" id="pgHamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
 </header>
 
 <!-- HERO -->
@@ -325,5 +346,36 @@ fetch('/api/about')
   })
   .catch(() => {});
 </script>
+
+<!-- Mobile Drawer -->
+<div class="pg-drawer" id="pgDrawer">
+  <div class="pg-drawer-head">
+    <span class="pg-drawer-logo">Dory's <em>Bakehouse</em></span>
+    <button class="pg-drawer-close" id="pgDrawerClose" aria-label="Close menu"><i class="fas fa-times"></i></button>
+  </div>
+  <nav class="pg-drawer-nav">
+    <a href="/"><i class="fas fa-home"></i> Home</a>
+    <a href="/#cakes"><i class="fas fa-cake-candles"></i> Cakes</a>
+    <a href="/flavours.html"><i class="fas fa-palette"></i> Flavours</a>
+    <a href="/#gallery"><i class="fas fa-images"></i> Gallery</a>
+    <a href="/#reviews"><i class="fas fa-star"></i> Reviews</a>
+    <a href="/our-story.html"><i class="fas fa-book-open"></i> Our Story</a>
+  </nav>
+  <a href="https://wa.me/919168445014?text=Hi!%20I%20want%20to%20order%20a%20cake" class="pg-drawer-wa" target="_blank">
+    <i class="fab fa-whatsapp"></i> Order on WhatsApp
+  </a>
+</div>
+<script>
+(function(){
+  var h=document.getElementById('pgHamburger'),d=document.getElementById('pgDrawer'),c=document.getElementById('pgDrawerClose');
+  function open(){d.classList.add('open');h.classList.add('open');document.body.style.overflow='hidden';}
+  function close(){d.classList.remove('open');h&&h.classList.remove('open');document.body.style.overflow='';}
+  h&&h.addEventListener('click',function(){d.classList.contains('open')?close():open();});
+  c&&c.addEventListener('click',close);
+  d&&d.addEventListener('click',function(e){if(e.target===d)close();});
+  d&&d.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});
+})();
+</script>
+
 </body>
 </html>

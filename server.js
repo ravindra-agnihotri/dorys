@@ -10,7 +10,6 @@ const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
 const multer = require("multer");
-let sharp; try { sharp = require("sharp"); } catch { sharp = null; console.warn("sharp not installed — run: npm install"); }
 const Database = require("better-sqlite3");
 
 /* =================================================
@@ -116,41 +115,12 @@ db.exec(`
 ================================================= */
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB — HEIC/RAW files can be large
-  fileFilter: (req, file, cb) => {
-    const ok = file.mimetype.startsWith("image/") ||
-      /\.(heic|heif|tiff?|bmp|avif|raw|cr2|nef|arw|dng)$/i.test(file.originalname);
-    cb(ok ? null : new Error("Only image files are allowed"), ok);
-  },
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
 });
 
 // Helper to convert buffer to base64
-/* ── IMAGE CONVERSION (HEIC / HEIF / TIFF / BMP / AVIF → JPEG) ── */
-const BROWSER_SAFE = new Set(["image/jpeg","image/png","image/gif","image/webp","image/svg+xml"]);
-
-async function convertImage(buffer, mimetype) {
-  if (sharp) {
-    try {
-      const out = await sharp(buffer)
-        .rotate()
-        .resize({ width: 1800, height: 1800, fit: "inside", withoutEnlargement: true })
-        .jpeg({ quality: 88, mozjpeg: true })
-        .toBuffer();
-      const wasBrowserSafe = BROWSER_SAFE.has(mimetype);
-      if (!wasBrowserSafe) console.log("Converted " + mimetype + " → image/jpeg (" + Math.round(out.length/1024) + "KB)");
-      return { buffer: out, mimetype: "image/jpeg" };
-    } catch(e) { console.error("Conversion failed:", e.message); }
-  }
-  return { buffer, mimetype };
-}
-
-async function toBase64Converted(buffer, mimetype) {
-  const r = await convertImage(buffer, mimetype);
-  return { data: "data:" + r.mimetype + ";base64," + r.buffer.toString("base64"), mime: r.mimetype };
-}
-
-// legacy sync (kept for any non-upload uses)
-const toBase64 = (buffer, mimetype) => "data:" + mimetype + ";base64," + buffer.toString("base64");
+const toBase64 = (buffer, mimetype) =>
+  `data:${mimetype};base64,${buffer.toString("base64")}`;
 
 /* =================================================
    IMAGE SERVING – serve stored images by table/id
@@ -196,21 +166,22 @@ app.get("/api/products", (req, res) => {
   res.json(withUrls);
 });
 
-app.post("/api/products", upload.single("image"), async (req, res) => {
-  try {
-    let imageData = null, imageMime = "image/jpeg";
-    if (req.file) {
-      const c = await toBase64Converted(req.file.buffer, req.file.mimetype);
-      imageData = c.data; imageMime = c.mime;
-    }
-    const result = db.prepare(
-      "INSERT INTO products (name, price, category, eggless, description, image_data, image_mime) VALUES (?, ?, ?, ?, ?, ?, ?)"
-    ).run(
-      req.body.name, Number(req.body.price), req.body.category || "General",
-      req.body.eggless === "true" ? 1 : 0, req.body.description || "", imageData, imageMime
-    );
-    res.json({ id: result.lastInsertRowid, imageUrl: "/api/image/products/" + result.lastInsertRowid });
-  } catch(e) { res.status(500).json({ error: e.message }); }
+app.post("/api/products", upload.single("image"), (req, res) => {
+  const imageData = req.file ? toBase64(req.file.buffer, req.file.mimetype) : null;
+  const stmt = db.prepare(`
+    INSERT INTO products (name, price, category, eggless, description, image_data, image_mime)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `);
+  const result = stmt.run(
+    req.body.name,
+    Number(req.body.price),
+    req.body.category || "General",
+    req.body.eggless === "true" ? 1 : 0,
+    req.body.description || "",
+    imageData,
+    req.file?.mimetype || "image/jpeg"
+  );
+  res.json({ id: result.lastInsertRowid, imageUrl: `/api/image/products/${result.lastInsertRowid}` });
 });
 
 app.delete("/api/products/:id", (req, res) => {
@@ -231,17 +202,18 @@ app.get("/api/gallery", (req, res) => {
   res.json(withUrls);
 });
 
-app.post("/api/gallery", upload.array("files"), async (req, res) => {
-  try {
-    const stmt = db.prepare("INSERT INTO gallery (title, tags, image_data, image_mime) VALUES (?, ?, ?, ?)");
+app.post("/api/gallery", upload.array("files"), (req, res) => {
+  const stmt = db.prepare(`INSERT INTO gallery (title, tags, image_data, image_mime) VALUES (?, ?, ?, ?)`);
+  const insertMany = db.transaction((files) => {
     const ids = [];
-    for (const file of req.files) {
-      const c = await toBase64Converted(file.buffer, file.mimetype);
-      const r = stmt.run("", "[]", c.data, c.mime);
+    for (const file of files) {
+      const r = stmt.run("", "[]", toBase64(file.buffer, file.mimetype), file.mimetype);
       ids.push(r.lastInsertRowid);
     }
-    res.json(ids.map(id => ({ id, url: "/api/image/gallery/" + id })));
-  } catch(e) { res.status(500).json({ error: e.message }); }
+    return ids;
+  });
+  const ids = insertMany(req.files);
+  res.json(ids.map(id => ({ id, url: `/api/image/gallery/${id}` })));
 });
 
 app.delete("/api/gallery/:id", (req, res) => {
@@ -293,17 +265,11 @@ app.get("/api/customized", (req, res) => {
   res.json(items.map(i => ({ ...i, imageUrl: `/api/image/customized/${i.id}` })));
 });
 
-app.post("/api/customized", upload.single("image"), async (req, res) => {
-  try {
-    let imageData = null, imageMime = "image/jpeg";
-    if (req.file) {
-      const c = await toBase64Converted(req.file.buffer, req.file.mimetype);
-      imageData = c.data; imageMime = c.mime;
-    }
-    const r = db.prepare("INSERT INTO customized (name, min_price, description, image_data, image_mime) VALUES (?, ?, ?, ?, ?)")
-      .run(req.body.name, Number(req.body.minPrice || 0), req.body.description, imageData, imageMime);
-    res.json({ id: r.lastInsertRowid });
-  } catch(e) { res.status(500).json({ error: e.message }); }
+app.post("/api/customized", upload.single("image"), (req, res) => {
+  const imageData = req.file ? toBase64(req.file.buffer, req.file.mimetype) : null;
+  const r = db.prepare(`INSERT INTO customized (name, min_price, description, image_data, image_mime) VALUES (?, ?, ?, ?, ?)`)
+    .run(req.body.name, Number(req.body.minPrice || 0), req.body.description, imageData, req.file?.mimetype || "image/jpeg");
+  res.json({ id: r.lastInsertRowid });
 });
 
 /* =================================================
@@ -315,28 +281,23 @@ app.get("/api/today", (req, res) => {
   res.json({ ...row, ingredients: JSON.parse(row.ingredients || "[]"), imageUrl: "/api/image/today_special/1" });
 });
 
-app.post("/api/today", upload.single("image"), async (req, res) => {
-  try {
-    let imageData = null, imageMime = "image/jpeg";
-    if (req.file) {
-      const c = await toBase64Converted(req.file.buffer, req.file.mimetype);
-      imageData = c.data; imageMime = c.mime;
-    }
-    db.prepare(`
-      INSERT INTO today_special (id, name, ingredients, price, image_data, image_mime, available_till, updated_at)
-      VALUES (1, ?, ?, ?, ?, ?, date('now'), datetime('now'))
-      ON CONFLICT(id) DO UPDATE SET
-        name=excluded.name, ingredients=excluded.ingredients, price=excluded.price,
-        image_data=COALESCE(excluded.image_data, image_data),
-        image_mime=excluded.image_mime, available_till=excluded.available_till, updated_at=excluded.updated_at
-    `).run(
-      req.body.name,
-      JSON.stringify(req.body.ingredients?.split(",") || []),
-      Number(req.body.price),
-      imageData, imageMime
-    );
-    res.json({ message: "Today's special updated" });
-  } catch(e) { res.status(500).json({ error: e.message }); }
+app.post("/api/today", upload.single("image"), (req, res) => {
+  const imageData = req.file ? toBase64(req.file.buffer, req.file.mimetype) : null;
+  db.prepare(`
+    INSERT INTO today_special (id, name, ingredients, price, image_data, image_mime, available_till, updated_at)
+    VALUES (1, ?, ?, ?, ?, ?, date('now'), datetime('now'))
+    ON CONFLICT(id) DO UPDATE SET
+      name=excluded.name, ingredients=excluded.ingredients, price=excluded.price,
+      image_data=COALESCE(excluded.image_data, image_data),
+      image_mime=excluded.image_mime, available_till=excluded.available_till, updated_at=excluded.updated_at
+  `).run(
+    req.body.name,
+    JSON.stringify(req.body.ingredients?.split(",") || []),
+    Number(req.body.price),
+    imageData,
+    req.file?.mimetype || "image/jpeg"
+  );
+  res.json({ message: "Today's special updated" });
 });
 
 app.delete("/api/today", (req, res) => {
