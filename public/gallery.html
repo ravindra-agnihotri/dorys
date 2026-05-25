@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cake Gallery | Dory's Bakehouse Baner Pune</title>
+  <meta name="description" content="Browse our full gallery of custom cakes — birthday cakes, wedding cakes, designer cakes and more from Dory's Bakehouse in Baner Pune.">
+  <link rel="canonical" href="https://www.dorysbakes.com/gallery.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@400;500;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .gallery-page { padding: 7rem 0 5rem; }
+    .gallery-page .gallery-grid { columns: 4 180px; }
+    .pg-hero { min-height: 38vh; display:flex; align-items:center; position:relative; padding-top:80px; }
+    .pg-hero-bg { position:absolute;inset:0; background:url('/img/hogwartback.png') center 40%/cover no-repeat; }
+    .pg-hero-ov { position:absolute;inset:0; background:linear-gradient(160deg,rgba(50,5,70,.82),rgba(100,20,60,.7)); }
+    .pg-hero-c { position:relative;z-index:1;width:100%;text-align:center;padding:3rem 1.5rem; }
+    .pg-hero-c h1 { color:#fff;font-size:clamp(2rem,4vw,3rem);margin-bottom:.6rem; }
+    .pg-hero-c p { color:rgba(255,255,255,.82); }
+    .pg-nav { position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);box-shadow:0 2px 20px rgba(0,0,0,.08);padding:.7rem 0; }
+    .pg-nav-inner { display:flex;align-items:center;justify-content:space-between; }
+    .pg-logo { font-family:'Dancing Script',cursive;font-size:1.5rem;font-weight:700;color:#6b3a1f; }
+    .pg-logo em { color:#e91e8c;font-style:normal; }
+    .pg-back { display:flex;align-items:center;gap:.4rem;font-size:.87rem;font-weight:500;color:#6b6560;transition:color .2s; }
+    .pg-back:hover { color:#e91e8c; }
+  </style>
+</head>
+<body>
+<header class="pg-nav">
+  <div class="container pg-nav-inner">
+    <a href="/" class="pg-logo">Dory's <em>Bakehouse</em></a>
+    <a href="/" class="pg-back"><i class="fas fa-arrow-left"></i> Back to Home</a>
+  </div>
+</header>
+<section class="pg-hero">
+  <div class="pg-hero-bg"></div>
+  <div class="pg-hero-ov"></div>
+  <div class="pg-hero-c">
+    <h1>Our Cake Gallery</h1>
+    <p>Every photo is a real celebration cake made in Baner Pune</p>
+  </div>
+</section>
+<main class="gallery-page">
+  <div class="container">
+    <div class="gallery-grid" id="fullGallery">
+      <div class="skel-card tall"></div><div class="skel-card"></div>
+      <div class="skel-card"></div><div class="skel-card tall"></div>
+    </div>
+    <div class="empty-state" id="galEmpty" style="display:none">
+      <i class="fas fa-images"></i><p>Gallery coming soon!</p>
+    </div>
+  </div>
+</main>
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose"><i class="fas fa-times"></i></button>
+  <button class="lb-nav prev" id="lbPrev"><i class="fas fa-chevron-left"></i></button>
+  <img class="lb-img" id="lbImg" src="" alt="Cake from Dory's Bakehouse">
+  <button class="lb-nav next" id="lbNext"><i class="fas fa-chevron-right"></i></button>
+</div>
+<a href="https://wa.me/919168445014" class="fab-wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
+<script>
+let imgs=[],idx=0;
+const lb=document.getElementById('lightbox'),lbImg=document.getElementById('lbImg');
+fetch('/api/gallery').then(r=>r.json()).then(data=>{
+  if(!data.length){document.getElementById('galEmpty').style.display='block';document.getElementById('fullGallery').innerHTML='';return;}
+  imgs=data;
+  document.getElementById('fullGallery').innerHTML=data.map((g,i)=>`<div class="gal-item" data-idx="${i}"><img class="gal-img" src="${g.url}" alt="Custom cake Baner Pune" loading="lazy" onerror="this.closest('.gal-item').style.display='none'"><div class="gal-overlay"><i class="fas fa-expand-alt"></i></div></div>`).join('');
+  document.getElementById('fullGallery').addEventListener('click',e=>{const it=e.target.closest('.gal-item');if(it){idx=parseInt(it.dataset.idx);lbImg.src=imgs[idx].url;lb.classList.add('open');document.body.style.overflow='hidden';}});
+}).catch(()=>{});
+document.getElementById('lbClose').onclick=()=>{lb.classList.remove('open');document.body.style.overflow='';};
+lb.addEventListener('click',e=>{if(e.target===lb){lb.classList.remove('open');document.body.style.overflow='';}});
+document.getElementById('lbPrev').onclick=()=>{idx=(idx-1+imgs.length)%imgs.length;lbImg.src=imgs[idx].url;};
+document.getElementById('lbNext').onclick=()=>{idx=(idx+1)%imgs.length;lbImg.src=imgs[idx].url;};
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape'){lb.classList.remove('open');document.body.style.overflow='';}if(e.key==='ArrowLeft')document.getElementById('lbPrev').click();if(e.key==='ArrowRight')document.getElementById('lbNext').click();});
+</script>
+</body>
+</html>

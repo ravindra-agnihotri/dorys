@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cake Flavours | Dory's Bakehouse Baner Pune</title>
+  <meta name="description" content="Explore 50+ delicious cake flavours at Dory's Bakehouse. Classic, premium, fruit & eggless options. Fresh cakes in Baner Pune.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --pink: #f472b6; --pink-dark: #db2777; --pink-light: #fce7f3;
+      --rose: #fb7185; --gold: #d4a574; --cream: #fff8f0;
+      --brown: #7c4a1e; --text: #1e1b18; --muted: #6b6560;
+      --white: #ffffff; --radius: 16px; --radius-lg: 24px;
+      --shadow: 0 4px 24px rgba(0,0,0,.08);
+      --shadow-md: 0 8px 40px rgba(0,0,0,.14);
+      --transition: .3s cubic-bezier(.4,0,.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; color: var(--text); background: var(--cream); overflow-x: hidden; }
+    h1,h2,h3 { font-family: 'Playfair Display', serif; line-height: 1.2; }
+    a { text-decoration: none; color: inherit; }
+    .container { max-width: 1060px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* NAVBAR */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(255,255,255,.96); backdrop-filter: blur(16px);
+      box-shadow: 0 2px 24px rgba(0,0,0,.08); padding: .75rem 0;
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: 'Dancing Script', cursive; font-size: 1.55rem; font-weight: 700; color: var(--brown); }
+    .logo em { font-style: normal; color: var(--pink-dark); }
+    .nav-links { display: flex; align-items: center; gap: 1.8rem; }
+    .nav-links a { font-size: .88rem; font-weight: 500; color: var(--text); transition: color var(--transition); }
+    .nav-links a:hover { color: var(--pink-dark); }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--pink-dark), var(--rose));
+      color: var(--white) !important; padding: .5rem 1.2rem; border-radius: 999px; font-size: .85rem;
+    }
+    .nav-back { display: flex; align-items: center; gap: .4rem; color: var(--muted) !important; font-size: .85rem !important; }
+    .nav-back:hover { color: var(--pink-dark) !important; }
+
+    /* HERO */
+    .hero {
+      min-height: 42vh; display: flex; align-items: flex-end;
+      position: relative; padding-top: 80px; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('/hogwartback.png') center 40% / cover no-repeat;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, rgba(80,15,60,.75) 0%, rgba(30,5,50,.68) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 1; padding: 3rem 1.5rem 3.5rem; text-align: center; width: 100%;
+    }
+    .hero-pill {
+      display: inline-block; background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.35); border-radius: 999px;
+      padding: .35rem 1rem; font-size: .78rem; font-weight: 600;
+      color: var(--white); margin-bottom: 1rem; letter-spacing: .06em; text-transform: uppercase;
+    }
+    .hero-content h1 { font-size: clamp(2rem, 4.5vw, 3.2rem); color: var(--white); margin-bottom: .7rem; }
+    .hero-em { font-family: 'Dancing Script', cursive; font-style: normal; color: var(--gold); }
+    .hero-content p { color: rgba(255,255,255,.84); font-size: 1rem; max-width: 480px; margin: 0 auto; line-height: 1.7; }
+
+    /* ORDER BANNER */
+    .order-banner {
+      background: linear-gradient(135deg, var(--pink-dark), var(--rose));
+      color: var(--white); text-align: center; padding: .75rem 1.5rem;
+      font-size: .85rem; font-weight: 500; position: relative;
+    }
+    .order-banner button {
+      position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: rgba(255,255,255,.7); cursor: pointer; font-size: 1rem;
+    }
+
+    /* MAIN CONTENT */
+    .main { padding: 3rem 0 5rem; }
+
+    .intro-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 1.8rem 2rem; box-shadow: var(--shadow);
+      margin-bottom: 2.5rem; display: flex; align-items: center; gap: 1.5rem;
+      border-left: 5px solid var(--pink-dark);
+    }
+    .intro-card i { font-size: 2rem; color: var(--pink-dark); flex-shrink: 0; }
+    .intro-card p { font-size: .92rem; color: var(--muted); line-height: 1.7; }
+
+    /* CATEGORY SECTION */
+    .flavour-section {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 2rem; box-shadow: var(--shadow); margin-bottom: 1.5rem;
+      transition: var(--transition);
+    }
+    .flavour-section:hover { box-shadow: var(--shadow-md); }
+    .cat-header {
+      display: flex; align-items: center; gap: .8rem;
+      margin-bottom: 1.3rem; padding-bottom: .9rem;
+      border-bottom: 1px solid var(--pink-light);
+    }
+    .cat-icon {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--pink-light); display: flex; align-items: center;
+      justify-content: center; font-size: 1.3rem; flex-shrink: 0;
+    }
+    .cat-header h2 { font-size: 1.25rem; color: var(--brown); }
+    .cat-header span { font-size: .82rem; color: var(--muted); }
+    .tag-list { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .tag {
+      background: var(--cream); border: 1px solid #f0d8d8;
+      padding: .45rem 1rem; border-radius: 999px; font-size: .85rem;
+      color: var(--text); transition: var(--transition); cursor: default;
+    }
+    .tag:hover { background: var(--pink-light); border-color: var(--pink); color: var(--pink-dark); }
+    .tag.eggless { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
+    .tag.premium {
+      background: linear-gradient(135deg, #fff3e0, #fef9c3);
+      border-color: #fcd34d; color: #92400e;
+    }
+    .price-note {
+      margin-top: 1rem; font-size: .81rem; color: var(--muted);
+      font-style: italic; display: flex; align-items: flex-start; gap: .4rem;
+    }
+
+    /* SPECIAL OPTIONS */
+    .special-section {
+      background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+      border: 1px solid #bbf7d0; border-radius: var(--radius-lg);
+      padding: 2rem; margin-bottom: 1.5rem;
+    }
+
+    /* DYNAMIC FROM API */
+    .api-note {
+      background: var(--white); border-radius: var(--radius);
+      padding: 1.2rem 1.5rem; border-left: 4px solid var(--gold);
+      font-size: .84rem; color: var(--muted); margin-bottom: 1.5rem;
+    }
+    #dynamicFlavours { display: none; }
+    #dynamicFlavours.has-data { display: block; }
+
+    /* CTA */
+    .flavours-cta {
+      background: url('/hogwartback.png') center / cover no-repeat;
+      border-radius: var(--radius-lg); overflow: hidden;
+      position: relative; margin-top: 2.5rem;
+    }
+    .flavours-cta-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(80,15,60,.82), rgba(30,5,50,.78));
+    }
+    .flavours-cta-inner {
+      position: relative; z-index: 1; text-align: center; padding: 3.5rem 2rem;
+    }
+    .flavours-cta-inner h2 { color: var(--white); font-size: 1.8rem; margin-bottom: .6rem; }
+    .flavours-cta-inner p { color: rgba(255,255,255,.84); margin-bottom: 1.5rem; }
+    .btn-wa {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: #25d366; color: var(--white); padding: .9rem 2rem;
+      border-radius: 999px; font-weight: 700; font-size: .97rem;
+      box-shadow: 0 4px 20px rgba(37,211,102,.4); transition: var(--transition);
+    }
+    .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(37,211,102,.5); }
+    .btn-wa i { font-size: 1.3rem; }
+
+    /* FOOTER */
+    .footer { background: var(--text); color: rgba(255,255,255,.65); text-align: center; padding: 1.8rem; font-size: .83rem; }
+    .footer a { color: var(--pink); }
+
+    /* FAB */
+    .fab-whatsapp {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 500;
+      width: 58px; height: 58px; background: #25d366; color: white;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; box-shadow: 0 4px 20px rgba(37,211,102,.4); transition: var(--transition);
+    }
+    .fab-whatsapp:hover { transform: scale(1.1); }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .intro-card { flex-direction: column; }
+      .cat-header h2 { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container nav-inner">
+    <a href="/" class="logo">Dory's <em>Bakehouse</em></a>
+    <nav class="nav-links">
+      <a href="/" class="nav-back"><i class="fas fa-arrow-left"></i> Home</a>
+      <a href="#cakes-anchor">Cakes</a>
+      <a href="/our-story.html">Our Story</a>
+      <a href="https://wa.me/919168445014" class="nav-cta" target="_blank">
+        <i class="fab fa-whatsapp"></i> Order Now
+      </a>
+    </nav>
+  </div>
+</header>
+
+<div class="order-banner" id="orderBanner">
+  🎂 Cakes are baked fresh on request — please order at least <strong>1 day in advance</strong>
+  <button onclick="document.getElementById('orderBanner').style.display='none'">✕</button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-pill"><i class="fas fa-palette"></i> &nbsp;Flavour Menu</div>
+    <h1>Pick Your <span class="hero-em">Perfect Flavour</span></h1>
+    <p>50+ handcrafted flavours — made in-house with no artificial additives. Every bite, pure joy.</p>
+  </div>
+</section>
+
+<main class="main">
+  <div class="container">
+
+    <div class="intro-card">
+      <i class="fas fa-info-circle"></i>
+      <p>All our fillings are crafted in-house from freshly sourced ingredients. We <strong>never use artificial flavours</strong>. 
+         Most flavours are available eggless — just ask! Availability may vary.</p>
+    </div>
+
+    <!-- Dynamic flavours from admin -->
+    <div id="dynamicFlavours">
+      <div class="api-note"><i class="fas fa-sync-alt"></i> &nbsp;Seasonal & custom flavours added by our team:</div>
+      <div class="flavour-section">
+        <div class="cat-header">
+          <div class="cat-icon">✨</div>
+          <div><h2>Chef's Special & Seasonal</h2><span>Updated by our team</span></div>
+        </div>
+        <div class="tag-list" id="dynamicTagList"></div>
+      </div>
+    </div>
+
+    <!-- CLASSIC -->
+    <div class="flavour-section">
+      <div class="cat-header">
+        <div class="cat-icon">🍫</div>
+        <div><h2>Classic Flavours</h2><span>Timeless favourites, always perfect</span></div>
+      </div>
+      <div class="tag-list">
+        <span class="tag">Chocolate Truffle</span>
+        <span class="tag">Vanilla Dream</span>
+        <span class="tag">Butterscotch</span>
+        <span class="tag">Black Forest</span>
+        <span class="tag">Pineapple Fresh</span>
+        <span class="tag">Red Velvet</span>
+        <span class="tag">White Forest</span>
+        <span class="tag">Caramel</span>
+        <span class="tag">Hazelnut</span>
+        <span class="tag">Dark Chocolate</span>
+        <span class="tag">Chocolate Fudge</span>
+        <span class="tag">Lemon Cheesecake</span>
+      </div>
+    </div>
+
+    <!-- PREMIUM -->
+    <div class="flavour-section">
+      <div class="cat-header">
+        <div class="cat-icon">👑</div>
+        <div><h2>Premium Flavours <span style="color:#f59e0b">✨</span></h2><span>Indulgent, rich & special</span></div>
+      </div>
+      <div class="tag-list">
+        <span class="tag premium">Belgian Dark Chocolate</span>
+        <span class="tag premium">Pistachio Rose</span>
+        <span class="tag premium">Ferrero Rocher</span>
+        <span class="tag premium">Tiramisu</span>
+        <span class="tag premium">Oreo Delight</span>
+        <span class="tag premium">Dulce de Leche</span>
+        <span class="tag premium">Coffee Mocha</span>
+        <span class="tag premium">Lotus Biscoff</span>
+        <span class="tag premium">Matcha Green Tea</span>
+        <span class="tag premium">Salted Caramel</span>
+        <span class="tag premium">Cheesecake Swirl</span>
+        <span class="tag premium">Almond Praline</span>
+      </div>
+      <p class="price-note"><i class="fas fa-info-circle"></i> Premium flavours may attract a small additional charge. Please enquire while ordering.</p>
+    </div>
+
+    <!-- FRUIT -->
+    <div class="flavour-section">
+      <div class="cat-header">
+        <div class="cat-icon">🍓</div>
+        <div><h2>Fruit Delight 🍓</h2><span>Fresh, vibrant & seasonal</span></div>
+      </div>
+      <div class="tag-list">
+        <span class="tag">Mango Delight</span>
+        <span class="tag">Strawberry Fresh</span>
+        <span class="tag">Blueberry</span>
+        <span class="tag">Raspberry</span>
+        <span class="tag">Kiwi Lime</span>
+        <span class="tag">Mixed Berry</span>
+        <span class="tag">Lemon Zest</span>
+        <span class="tag">Watermelon</span>
+        <span class="tag">Passion Fruit</span>
+        <span class="tag">Peach & Cream</span>
+        <span class="tag">Guava Bliss</span>
+        <span class="tag">Litchi Rose</span>
+      </div>
+      <p class="price-note"><i class="fas fa-leaf"></i> All fruit fillings are made in-house with freshly sourced fruits — no artificial flavours ever.</p>
+    </div>
+
+    <!-- SPECIAL / DIETARY -->
+    <div class="flavour-section special-section">
+      <div class="cat-header">
+        <div class="cat-icon" style="background:#f0fdf4">💚</div>
+        <div><h2>Healthy & Special Options</h2><span>For every dietary need</span></div>
+      </div>
+      <div class="tag-list">
+        <span class="tag eggless"><i class="fas fa-leaf"></i> Fully Eggless — Any Flavour</span>
+        <span class="tag eggless">Dairy-Free Options</span>
+        <span class="tag eggless">Gluten-Free Cakes</span>
+        <span class="tag eggless">Sugar-Free / Diabetic</span>
+        <span class="tag eggless">Allergen-Friendly</span>
+        <span class="tag eggless">Vegan Cakes</span>
+      </div>
+      <p class="price-note" style="color:#15803d"><i class="fas fa-check-circle"></i> Just mention your dietary requirements when ordering — we'll accommodate you!</p>
+    </div>
+
+    <!-- CTA -->
+    <div class="flavours-cta">
+      <div class="flavours-cta-overlay"></div>
+      <div class="flavours-cta-inner">
+        <h2>Found your perfect flavour?</h2>
+        <p>WhatsApp us — we'll bake it fresh just for you 🎂</p>
+        <a href="https://wa.me/919168445014?text=Hi! I'd like to order a cake from Dory's Bakehouse." class="btn-wa" target="_blank">
+          <i class="fab fa-whatsapp"></i> Order on WhatsApp
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <p>© 2026 <a href="/">Dory's Bakehouse</a> · Baner, Pune</p>
+</footer>
+
+<a href="https://wa.me/919168445014" class="fab-whatsapp" target="_blank" aria-label="WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<script>
+// Load dynamic flavours from admin API
+fetch('/api/flavours')
+  .then(r => r.json())
+  .then(data => {
+    if (!data.length) return;
+    const container = document.getElementById('dynamicFlavours');
+    const list = document.getElementById('dynamicTagList');
+    container.classList.add('has-data');
+    list.innerHTML = data.map(f =>
+      `<span class="tag ${f.eggless ? 'eggless' : ''}">${f.eggless ? '🌿 ' : ''}${f.name}${f.extra_cost > 0 ? ` +₹${f.extra_cost}` : ''}</span>`
+    ).join('');
+  })
+  .catch(() => {});
+</script>
+</body>
+</html>

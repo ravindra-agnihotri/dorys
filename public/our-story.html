@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Story | Dory's Bakehouse</title>
+  <meta name="description" content="Discover the heartwarming story behind Dory's Bakehouse — a journey of passion, love, and delicious cakes in Baner Pune.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --pink: #f472b6; --pink-dark: #db2777; --pink-light: #fce7f3;
+      --rose: #fb7185; --gold: #d4a574; --gold-dark: #b08c5a;
+      --cream: #fff8f0; --warm: #fef3c7; --brown: #7c4a1e;
+      --text: #1e1b18; --muted: #6b6560; --white: #ffffff;
+      --radius: 16px; --radius-lg: 24px;
+      --shadow: 0 4px 24px rgba(0,0,0,.08);
+      --shadow-md: 0 8px 40px rgba(0,0,0,.14);
+      --transition: .3s cubic-bezier(.4,0,.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; color: var(--text); background: var(--cream); overflow-x: hidden; }
+    h1,h2,h3 { font-family: 'Playfair Display', serif; line-height: 1.25; }
+    a { text-decoration: none; color: inherit; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* NAVBAR */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(255,255,255,.95); backdrop-filter: blur(16px);
+      box-shadow: 0 2px 24px rgba(0,0,0,.07); padding: .75rem 0;
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: 'Dancing Script', cursive; font-size: 1.55rem; font-weight: 700; color: var(--brown); }
+    .logo em { font-style: normal; color: var(--pink-dark); }
+    .nav-links { display: flex; align-items: center; gap: 1.8rem; }
+    .nav-links a { font-size: .88rem; font-weight: 500; color: var(--text); transition: color var(--transition); }
+    .nav-links a:hover { color: var(--pink-dark); }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--pink-dark), var(--rose));
+      color: var(--white) !important; padding: .5rem 1.2rem; border-radius: 999px;
+    }
+    .nav-back { display: flex; align-items: center; gap: .4rem; color: var(--muted) !important; font-size: .85rem !important; }
+
+    /* HERO */
+    .hero {
+      min-height: 55vh; display: flex; align-items: center;
+      position: relative; overflow: hidden; padding-top: 80px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('/hogwartback.png') center 25% / cover no-repeat;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, rgba(50,10,70,.8) 0%, rgba(100,20,70,.65) 50%, rgba(20,5,40,.75) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 1; padding: 3rem 1.5rem 4rem; text-align: center; width: 100%;
+    }
+    .hero-pill {
+      display: inline-block; background: rgba(212,165,116,.25);
+      border: 1px solid rgba(212,165,116,.5); border-radius: 999px;
+      padding: .35rem 1.1rem; font-size: .78rem; font-weight: 600;
+      color: var(--gold); margin-bottom: 1.2rem; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .hero-content h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem); color: var(--white);
+      margin-bottom: .9rem; text-shadow: 0 4px 20px rgba(0,0,0,.3);
+    }
+    .hero-cursive { font-family: 'Dancing Script', cursive; font-style: normal; color: var(--gold); }
+    .hero-content p { color: rgba(255,255,255,.83); font-size: 1rem; max-width: 520px; margin: 0 auto; line-height: 1.75; }
+
+    /* STORY BODY */
+    .story-body { padding: 4rem 0 5rem; }
+
+    /* INTRO DROP CAP */
+    .intro-block {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 2.5rem 3rem; box-shadow: var(--shadow); margin-bottom: 2.5rem;
+      border-top: 5px solid var(--pink-dark);
+    }
+    .intro-block p { font-size: 1.05rem; color: var(--muted); line-height: 1.9; }
+    .intro-block p + p { margin-top: 1rem; }
+    .intro-block p:first-child::first-letter {
+      font-family: 'Dancing Script', cursive; font-size: 4.5rem; font-weight: 700;
+      color: var(--pink-dark); float: left; line-height: .75;
+      margin-right: .12em; margin-top: .08em;
+    }
+
+    /* DYNAMIC ABOUT */
+    #aboutDynamic { display: none; }
+    #aboutDynamic.loaded { display: block; }
+
+    /* TIMELINE */
+    .timeline { margin: 3rem 0; }
+    .tl-title { text-align: center; margin-bottom: 2.5rem; }
+    .tl-title h2 { font-size: 1.8rem; color: var(--brown); margin-bottom: .4rem; }
+    .tl-title p { color: var(--muted); font-size: .92rem; }
+
+    .tl-items { position: relative; padding-left: 2rem; }
+    .tl-items::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(to bottom, var(--pink-dark), var(--gold));
+      border-radius: 2px;
+    }
+    .tl-item {
+      position: relative; padding: 0 0 2.5rem 2rem;
+    }
+    .tl-dot {
+      position: absolute; left: -1.55rem; top: .2rem;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--pink-dark); border: 3px solid var(--white);
+      box-shadow: 0 0 0 2px var(--pink-dark);
+    }
+    .tl-year {
+      font-size: .75rem; font-weight: 700; color: var(--pink-dark);
+      text-transform: uppercase; letter-spacing: .1em; margin-bottom: .3rem;
+    }
+    .tl-item h3 { font-size: 1.1rem; margin-bottom: .5rem; color: var(--brown); }
+    .tl-item p { font-size: .9rem; color: var(--muted); line-height: 1.75; }
+
+    /* VALUES GRID */
+    .values-section { margin: 3.5rem 0; }
+    .values-section h2 { text-align: center; font-size: 1.8rem; color: var(--brown); margin-bottom: 2rem; }
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; }
+    .value-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 1.8rem 1.5rem; text-align: center; box-shadow: var(--shadow);
+      transition: var(--transition); border-bottom: 3px solid transparent;
+    }
+    .value-card:hover { transform: translateY(-5px); border-bottom-color: var(--pink-dark); }
+    .value-emoji { font-size: 2.2rem; margin-bottom: .7rem; display: block; }
+    .value-card h3 { font-size: 1rem; margin-bottom: .4rem; color: var(--brown); }
+    .value-card p { font-size: .83rem; color: var(--muted); line-height: 1.65; }
+
+    /* PROMISE BLOCK */
+    .promise-block {
+      position: relative; border-radius: var(--radius-lg);
+      overflow: hidden; margin: 3rem 0;
+    }
+    .promise-bg {
+      position: absolute; inset: 0;
+      background: url('/hogwartback.png') center / cover no-repeat;
+    }
+    .promise-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(80,15,60,.82), rgba(30,5,50,.78));
+    }
+    .promise-inner {
+      position: relative; z-index: 1; padding: 3.5rem 2.5rem; text-align: center;
+    }
+    .promise-inner h2 { color: var(--gold); font-size: 1.8rem; font-family: 'Dancing Script', cursive; margin-bottom: .8rem; }
+    .promise-inner p { color: rgba(255,255,255,.85); font-size: .98rem; max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.8; }
+    .btn-wa {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: #25d366; color: var(--white); padding: .9rem 2rem;
+      border-radius: 999px; font-weight: 700; font-size: .97rem;
+      box-shadow: 0 4px 20px rgba(37,211,102,.4); transition: var(--transition);
+    }
+    .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(37,211,102,.5); }
+    .btn-wa i { font-size: 1.3rem; }
+
+    /* FOOTER */
+    .footer { background: var(--text); color: rgba(255,255,255,.65); text-align: center; padding: 1.8rem; font-size: .83rem; }
+    .footer a { color: var(--pink); }
+
+    /* FAB */
+    .fab-whatsapp {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 500;
+      width: 58px; height: 58px; background: #25d366; color: white;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; box-shadow: 0 4px 20px rgba(37,211,102,.4); transition: var(--transition);
+    }
+    .fab-whatsapp:hover { transform: scale(1.1); }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .intro-block { padding: 1.8rem; }
+      .intro-block p:first-child::first-letter { font-size: 3.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container nav-inner">
+    <a href="/" class="logo">Dory's <em>Bakehouse</em></a>
+    <nav class="nav-links">
+      <a href="/" class="nav-back"><i class="fas fa-arrow-left"></i> Home</a>
+      <a href="/flavours.html">Flavours</a>
+      <a href="https://wa.me/919168445014" class="nav-cta" target="_blank">
+        <i class="fab fa-whatsapp"></i> Order Now
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-pill"><i class="fas fa-heart"></i> &nbsp;Our Story</div>
+    <h1>A <span class="hero-cursive">Labour of Love</span></h1>
+    <p>Every cake we bake carries a piece of our heart — a story of passion, family, and the simple joy of making people smile.</p>
+  </div>
+</section>
+
+<main class="story-body">
+  <div class="container">
+
+    <!-- Dynamic about from admin -->
+    <div id="aboutDynamic">
+      <div class="intro-block">
+        <p id="aboutDesc1">Every cake is baked fresh with love using premium ingredients.</p>
+        <p id="aboutDesc2">Custom designs, eggless options & same-day delivery available.</p>
+      </div>
+    </div>
+
+    <!-- Static story (always shown if dynamic not loaded) -->
+    <div class="intro-block" id="staticStory">
+      <p>What started as a small dream in a home kitchen has blossomed into Baner's most beloved cake studio. Dory's Bakehouse was born from a simple belief — that every celebration deserves something truly special, baked with real ingredients and genuine care.</p>
+      <p>We never compromise on quality. From the first consultation to the final decoration, every cake is a labour of love — handcrafted to match your vision and delight everyone at the table.</p>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="timeline">
+      <div class="tl-title">
+        <h2>Our Journey</h2>
+        <p>From a home kitchen to Pune's favourite cake studio</p>
+      </div>
+      <div class="tl-items">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">The Beginning</div>
+          <h3>Started from Home</h3>
+          <p>It all started with a kitchen, a passion for baking, and a few friends who couldn't stop asking for more. Word spread quickly — Dory's cakes were different.</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--gold)"></div>
+          <div class="tl-year">Growing</div>
+          <h3>First 100 Customers</h3>
+          <p>Birthdays, anniversaries, baby showers — every celebration became a chance to create a memory. Our customers became our family.</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Expanding</div>
+          <h3>50+ Flavours & Custom Designs</h3>
+          <p>We expanded our menu to 50+ flavours, introduced eggless options for all cakes, and started taking on intricate custom design requests.</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--gold)"></div>
+          <div class="tl-year">Today</div>
+          <h3>500+ Happy Customers & Growing</h3>
+          <p>Every day brings a new celebration to create for. From Baner to across Pune, Dory's Bakehouse cakes bring smiles wherever they go.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- VALUES -->
+    <div class="values-section">
+      <h2>What We Stand For</h2>
+      <div class="values-grid">
+        <div class="value-card">
+          <span class="value-emoji">🌿</span>
+          <h3>Real Ingredients</h3>
+          <p>No artificial flavours. Fresh fruits, premium chocolate, real dairy — always.</p>
+        </div>
+        <div class="value-card">
+          <span class="value-emoji">🎨</span>
+          <h3>Custom Artistry</h3>
+          <p>Every design starts with your vision. We make it come to life, beautifully.</p>
+        </div>
+        <div class="value-card">
+          <span class="value-emoji">❤️</span>
+          <h3>Baked with Love</h3>
+          <p>Each cake is made by hand, with attention, care, and a whole lot of heart.</p>
+        </div>
+        <div class="value-card">
+          <span class="value-emoji">🤝</span>
+          <h3>Your Joy, Our Mission</h3>
+          <p>Your celebration matters to us. We go the extra mile to make it perfect.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROMISE -->
+    <div class="promise-block">
+      <div class="promise-bg"></div>
+      <div class="promise-overlay"></div>
+      <div class="promise-inner">
+        <h2>Our Promise to You</h2>
+        <p>Every cake we deliver is baked fresh that day, crafted exactly to your specifications, and delivered with love. If you're ever not satisfied, we make it right.</p>
+        <a href="https://wa.me/919168445014?text=Hi! I'd love to order a custom cake from Dory's Bakehouse." class="btn-wa" target="_blank">
+          <i class="fab fa-whatsapp"></i> Start Your Order
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <p>© 2026 <a href="/">Dory's Bakehouse</a> · Baner, Pune · Made with ❤️</p>
+</footer>
+
+<a href="https://wa.me/919168445014" class="fab-whatsapp" target="_blank" aria-label="WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<script>
+// Load about from API
+fetch('/api/about')
+  .then(r => r.json())
+  .then(data => {
+    if (!data) return;
+    document.getElementById('staticStory').style.display = 'none';
+    const dyn = document.getElementById('aboutDynamic');
+    dyn.classList.add('loaded');
+    if (data.description) document.getElementById('aboutDesc1').textContent = data.description;
+    if (data.description2) document.getElementById('aboutDesc2').textContent = data.description2;
+  })
+  .catch(() => {});
+</script>
+</body>
+</html>
