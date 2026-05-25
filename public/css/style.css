@@ -726,3 +726,32 @@ body:not(.no-bar) .navbar { top: 0; }
   .stat strong, .stat-num { font-size: 1.5rem; }
   .local-grid { grid-template-columns: 1fr 1fr; }
 }
+
+
+/* ===== UNIFORM CAKE IMAGES ===== */
+.gallery-grid,
+.cake-grid,
+.products-grid,
+.gallery-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.gallery-card,
+.cake-card,
+.product-card {
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.gallery-card img,
+.cake-card img,
+.product-card img,
+.cake-img {
+  width: 100% !important;
+  height: 320px !important;
+  object-fit: cover !important;
+  border-radius: 20px;
+  display: block;
+}

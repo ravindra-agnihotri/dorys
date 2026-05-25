@@ -354,7 +354,7 @@ async function loadProducts() {
   if (!products.length) { list.innerHTML = '<p style="color:var(--muted)">No products yet.</p>'; return; }
   list.innerHTML = products.map(p => `
     <div class="item-row">
-      <img src="${p.imageUrl}" class="item-thumb" onerror="this.style.background='#fce7f3'">
+      <img loading="lazy" src="${p.imageUrl}" class="item-thumb" onerror="this.style.background='#fce7f3'">
       <div class="item-info">
         <strong>${p.name}</strong>
         <span>₹${p.price} • ${p.category}${p.eggless ? ' • 🌿 Eggless' : ''}</span>
@@ -404,7 +404,7 @@ async function loadGalleryAdmin() {
   if (!items.length) { grid.innerHTML = '<p style="color:var(--muted)">No images yet.</p>'; return; }
   grid.innerHTML = items.map(img => `
     <div class="admin-gal-item">
-      <img src="${img.url}" onerror="this.style.display='none'">
+      <img loading="lazy" src="${img.url}" onerror="this.style.display='none'">
       <button onclick="deleteGallery(${img.id})"><i class="fas fa-times"></i></button>
     </div>
   `).join('');
