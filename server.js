@@ -11,6 +11,44 @@ const path = require("path");
 const cors = require("cors");
 const multer = require("multer");
 const Database = require("better-sqlite3");
+const convert = require("heic-convert");
+const sharp = require("sharp");
+
+async function processImage(file) {
+  if (!file) return null;
+
+  let buffer = file.buffer;
+  let mimetype = file.mimetype;
+
+  if (
+    mimetype === "image/heic" ||
+    mimetype === "image/heif"
+  ) {
+    buffer = await convert({
+      buffer: file.buffer,
+      format: "JPEG",
+      quality: 0.9
+    });
+
+    mimetype = "image/jpeg";
+  }
+
+  // Resize all images into uniform thumbnails
+  buffer = await sharp(buffer)
+    .resize(800, 800, {
+      fit: "cover"
+    })
+    .jpeg({ quality: 85 })
+    .toBuffer();
+
+  mimetype = "image/jpeg";
+
+  return {
+    data: `data:${mimetype};base64,${buffer.toString("base64")}`,
+    mimetype
+  };
+}
+
 
 /* =================================================
    APP CONFIG
@@ -166,8 +204,9 @@ app.get("/api/products", (req, res) => {
   res.json(withUrls);
 });
 
-app.post("/api/products", upload.single("image"), (req, res) => {
-  const imageData = req.file ? toBase64(req.file.buffer, req.file.mimetype) : null;
+app.post("/api/products", upload.single("image"), async (req, res) => {
+  const processed = req.file ? await processImage(req.file) : null;
+  const imageData = processed ? processed.data : null;
   const stmt = db.prepare(`
     INSERT INTO products (name, price, category, eggless, description, image_data, image_mime)
     VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -179,7 +218,7 @@ app.post("/api/products", upload.single("image"), (req, res) => {
     req.body.eggless === "true" ? 1 : 0,
     req.body.description || "",
     imageData,
-    req.file?.mimetype || "image/jpeg"
+    processed?.mimetype || "image/jpeg"
   );
   res.json({ id: result.lastInsertRowid, imageUrl: `/api/image/products/${result.lastInsertRowid}` });
 });
@@ -295,7 +334,7 @@ app.post("/api/today", upload.single("image"), (req, res) => {
     JSON.stringify(req.body.ingredients?.split(",") || []),
     Number(req.body.price),
     imageData,
-    req.file?.mimetype || "image/jpeg"
+    processed?.mimetype || "image/jpeg"
   );
   res.json({ message: "Today's special updated" });
 });
